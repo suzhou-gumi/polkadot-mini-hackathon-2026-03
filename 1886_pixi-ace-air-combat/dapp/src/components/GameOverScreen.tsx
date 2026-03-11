@@ -5,10 +5,7 @@ interface GameOverScreenProps {
   onRestart: () => void;
 }
 
-export default function GameOverScreen({
-  result,
-  onRestart,
-}: GameOverScreenProps) {
+function GameOverScreen({ result, onRestart }: GameOverScreenProps) {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center bg-black">
       {/* Background overlay */}
@@ -28,7 +25,7 @@ export default function GameOverScreen({
         </h2>
 
         {/* Divider */}
-        <div className="mb-8 h-px w-80 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+        <div className="mb-8 h-px w-80 bg-linear-to-r from-transparent via-red-500 to-transparent" />
 
         {/* Stats */}
         <div className="mb-8 grid grid-cols-3 gap-8 text-center">
@@ -68,7 +65,7 @@ export default function GameOverScreen({
         </div>
 
         {/* Divider */}
-        <div className="mb-8 h-px w-80 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+        <div className="mb-8 h-px w-80 bg-linear-to-r from-transparent via-red-500 to-transparent" />
 
         {/* Rank */}
         <div className="mb-8 text-center">
@@ -104,3 +101,5 @@ function getRank(score: number): string {
   if (score >= 1000) return "▽ ROOKIE ▽";
   return "○ RECRUIT ○";
 }
+
+export default GameOverScreen;

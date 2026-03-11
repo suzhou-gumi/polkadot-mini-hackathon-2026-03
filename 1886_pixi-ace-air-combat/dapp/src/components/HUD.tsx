@@ -4,7 +4,7 @@ interface HUDProps {
   state: GameState;
 }
 
-export default function HUD({ state }: HUDProps) {
+function HUD({ state }: HUDProps) {
   const hpPercent = (state.playerHp / state.playerMaxHp) * 100;
 
   return (
@@ -12,7 +12,7 @@ export default function HUD({ state }: HUDProps) {
       {/* Top bar */}
       <div className="flex items-start justify-between p-4">
         {/* Left: HP */}
-        <div className="min-w-[180px]">
+        <div className="min-w-44">
           <div className="mb-1 font-mono text-xs tracking-widest text-cyan-500 uppercase">
             Hull Integrity
           </div>
@@ -58,7 +58,7 @@ export default function HUD({ state }: HUDProps) {
         </div>
 
         {/* Right: Status indicators */}
-        <div className="flex min-w-[180px] flex-col items-end gap-1">
+        <div className="flex min-w-44 flex-col items-end gap-1">
           {state.shieldActive && (
             <div
               className="rounded border border-cyan-500 px-2 py-0.5 font-mono text-xs text-cyan-400"
@@ -86,3 +86,5 @@ export default function HUD({ state }: HUDProps) {
     </div>
   );
 }
+
+export default HUD;

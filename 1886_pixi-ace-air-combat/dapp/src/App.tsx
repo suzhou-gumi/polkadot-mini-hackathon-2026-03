@@ -1,8 +1,13 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
-import StartScreen from "./components/StartScreen";
+import { WagmiProvider, useConnection } from "wagmi";
+import { Connection } from "./components/Connection";
 import GameCanvas from "./components/GameCanvas";
 import GameOverScreen from "./components/GameOverScreen";
-import { GameState } from "./game/types";
+import StartScreen from "./components/StartScreen";
+import { WalletOptions } from "./components/WalletOptions";
+import { config } from "./config";
+import type { GameState } from "./game/types";
 
 export type AppScreen = "start" | "playing" | "gameover";
 
@@ -12,6 +17,14 @@ export interface GameResult {
   wave: number;
 }
 
+const queryClient = new QueryClient();
+
+function ConnectWallet() {
+  const { isConnected } = useConnection();
+  if (isConnected) return <Connection />;
+  return <WalletOptions />;
+}
+
 export default function App() {
   const [screen, setScreen] = useState<AppScreen>("start");
   const [gameResult, setGameResult] = useState<GameResult>({
@@ -19,8 +32,15 @@ export default function App() {
     kills: 0,
     wave: 1,
   });
+  const [open, setOpen] = useState(false);
 
-  const handleStart = () => setScreen("playing");
+  const handleStart = (isConnected: boolean) => {
+    if (!isConnected) {
+      setOpen(true);
+      return;
+    }
+    setScreen("playing");
+  };
 
   const handleGameOver = (state: GameState) => {
     setGameResult({ score: state.score, kills: state.kills, wave: state.wave });
@@ -28,14 +48,21 @@ export default function App() {
   };
 
   const handleRestart = () => setScreen("playing");
-
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-black">
-      {screen === "start" && <StartScreen onStart={handleStart} />}
-      {screen === "playing" && <GameCanvas onGameOver={handleGameOver} />}
-      {screen === "gameover" && (
-        <GameOverScreen result={gameResult} onRestart={handleRestart} />
-      )}
-    </div>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <div className="relative h-screen w-screen overflow-hidden bg-black">
+          {screen === "start" && (
+            <StartScreen onStart={handleStart} open={open} setOpen={setOpen}>
+              <ConnectWallet />
+            </StartScreen>
+          )}
+          {screen === "playing" && <GameCanvas onGameOver={handleGameOver} />}
+          {screen === "gameover" && (
+            <GameOverScreen result={gameResult} onRestart={handleRestart} />
+          )}
+        </div>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

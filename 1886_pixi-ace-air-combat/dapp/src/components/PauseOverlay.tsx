@@ -2,7 +2,7 @@ interface PauseOverlayProps {
   onResume: () => void;
 }
 
-export default function PauseOverlay({ onResume }: PauseOverlayProps) {
+function PauseOverlay({ onResume }: PauseOverlayProps) {
   return (
     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm">
       <div className="mb-2 font-mono text-sm tracking-[0.5em] text-cyan-500 uppercase">
@@ -15,7 +15,7 @@ export default function PauseOverlay({ onResume }: PauseOverlayProps) {
         PAUSED
       </h2>
 
-      <div className="mb-8 h-px w-64 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <div className="mb-8 h-px w-64 bg-linear-to-r from-transparent via-cyan-500 to-transparent" />
 
       <div className="mb-8 font-mono text-sm text-gray-400">
         Press{" "}
@@ -35,3 +35,5 @@ export default function PauseOverlay({ onResume }: PauseOverlayProps) {
     </div>
   );
 }
+
+export default PauseOverlay;
