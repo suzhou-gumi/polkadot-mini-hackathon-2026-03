@@ -71,12 +71,21 @@ export default function PlaneUpgradeModal({
     setDelta: (v: bigint) => void;
     color: string;
   }) => (
-    <div className="flex items-center justify-between gap-4 font-mono text-sm">
-      <span className={`w-32 ${color} tracking-widest uppercase`}>{label}</span>
-      <span className="w-12 text-right text-white">
+    <div className="flex items-center gap-2 font-mono text-sm">
+      {/* label 改用 flex-1 自动占剩余空间，不再固定 w-32 */}
+      <span
+        className={`min-w-0 flex-1 ${color} truncate tracking-widest uppercase`}
+      >
+        {label}
+      </span>
+
+      {/* 当前等级 */}
+      <span className="w-10 shrink-0 text-right text-white">
         Lv.{current.toString()}
       </span>
-      <div className="flex items-center gap-2">
+
+      {/* +/- 控制区 */}
+      <div className="flex shrink-0 items-center gap-1">
         <button
           onClick={() => delta > 0n && setDelta(delta - 1n)}
           disabled={delta === 0n}
@@ -84,7 +93,7 @@ export default function PlaneUpgradeModal({
         >
           −
         </button>
-        <span className="w-6 text-center text-cyan-400">
+        <span className="w-5 text-center text-cyan-400">
           {delta.toString()}
         </span>
         <button
@@ -94,8 +103,10 @@ export default function PlaneUpgradeModal({
           +
         </button>
       </div>
-      <span className="w-16 text-right text-gray-400">
-        → Lv.{(current + delta).toString()}
+
+      {/* 升级后等级 */}
+      <span className="w-14 shrink-0 text-right text-gray-400">
+        →Lv.{(current + delta).toString()}
       </span>
     </div>
   );
